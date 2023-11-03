@@ -4,84 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=p, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>StopWatch</title>
+    <script src="https://kit.fontawesome.com/c01895ff66.js" crossorigin="anonymous"></script>
+    <title>Music player</title>
 </head>
 
 <body>
     <div class="container">
-        <div class="clock">
-            <div class="circle" style="--clr:#04fc43;" id="sc"><i></i></div>
-            <div class="circle circle2" style="--clr:#fee800;" id="mn"><i></i></div>
-            <div class="circle circle3" style="--clr:#ff2972;" id="hr"><i></i></div>
+        <div class="music-player">
+            <nav>
+                <div class="circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+            <img src="./media/jkkk.jpeg" class="song-img">
+            <h1>Euphoria</h1>
+            <p>Jeon Jungkook</p>
+            <audio id="song">
+                <source src="./media/Jmd-Bts jungkook euphoria lyrics[color lyrics].m4a">
+                
+            </audio>
+            
+            <input type="range" value="0" id="progress">
 
-            <span style="--i:1"><b>1</b></span>
-            <span style="--i:2"><b>2</b></span>
-            <span style="--i:3"><b>3</b></span>
-            <span style="--i:4"><b>4</b></span>
-            <span style="--i:5"><b>5</b></span>
-            <span style="--i:6"><b>6</b></span>
-            <span style="--i:7"><b>7</b></span>
-            <span style="--i:8"><b>8</b></span>
-            <span style="--i:9"><b>9</b></span>
-            <span style="--i:10"><b>10</b></span>
-            <span style="--i:11"><b>11</b></span>
-            <span style="--i:12"><b>12</b></span>
+            <div class="controls">
+                <div><i class="fa-solid fa-backward"></i> </div>
+                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlicon"></i> </div>
+                <div><i class="fa-solid fa-forward"></i> </div>
+            </div>
+
+
         </div>
-
-        <!---digital clock-->
-        <div id="time">
-            <div id="hour" style="--clr:#ff2972;">00</div>
-            <div id="minutes" style="--clr:#fee800;">00</div>
-            <div id="seconds" style="--clr:#04fc43;">00</div>
-            <div id="ampm">AM</div>
-        </div>
-
     </div>
-
-
     <script>
-        let hr = document.querySelector('#hr');
-        let mn = document.querySelector('#mn');
-        let sc = document.querySelector('#sc');
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlicon = document.getElementById("ctrlicon");
 
-        setInterval(() => {
-            let day = new Date();
-            let hh = day.getHours() * 30;
-            let mm = day.getMinutes() * 6;
-            let ss = day.getSeconds() * 6;
+        song.onloadedmetadata = function () {
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+            progress.max = song.duration;
 
-            hr.style.transform = `rotateZ(${hh + (mm / 12)}deg)`;
-            mn.style.transform = `rotateZ(${mm}deg)`;
-            sc.style.transform = `rotateZ(${ss}deg)`;
-            let hours = document.getElementById('hour');
-            let minutes = document.getElementById('minutes');
-            let seconds = document.getElementById('seconds');
-            let ampm = document.getElementById('ampm');
-
-            let h = new Date().getHours();
-            let m = new Date().getMinutes();
-            let s = new Date().getSeconds();
-
-            let am = h >= 12 ? "PM" : "AM";
-
-            if (h > 12) {
-                h = h - 12;
+        }
+        function playPause() {
+            if (ctrlicon.classList.contains("fa-pause")) {
+                song.pause();
+                ctrlicon.classList.remove("fa-pause");
+                ctrlicon.classList.add("fa-play");
             }
+            else {
+                song.play();
+                ctrlicon.classList.add("fa-pause");
+                ctrlicon.classList.remove("fa-play");
+            }
+        }
 
-            h = (h < 10) ? "0" + h : h
+        if (song.play()) {
+            setInterval(() => {
+                progress.value = song.currentTime;
+            }, 500);
+        }
 
-            m = (m < 10) ? "0" + m : m
+        progress.onchange = function () {
+            song.play();
+            song.currentTime = progress.value;
+            ctrlicon.classList.add("fa-pause");
+            ctrlicon.classList.remove("fa-play");
+        }
 
-            s = (s < 10) ? "0" + s : s
-
-            hours.innerHTML = h;
-            minutes.innerHTML = m;
-            seconds.innerHTML = s;
-            ampm.innerHTML = am;
-        })
-    </script>
+</script>
 
 </body>
 
